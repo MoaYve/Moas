@@ -19,4 +19,4 @@ sudo python3 -m pip install bs4
 `import ditt_projekt
 
 # Exempel på användning
-ditt_projekt.funktion()
+Moas.hangman()
