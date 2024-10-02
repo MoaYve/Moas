@@ -4,9 +4,9 @@ import sys
 import requests
 import re
 try:
-    from bs4 import BeautifulSoup
+    from bs4 import BeautifulSoup4
 except:
-    print('Can you run command pip install beautifulsoup4? ')
+    
 
 import random
 
