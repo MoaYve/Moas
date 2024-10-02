@@ -4,8 +4,6 @@ Projektet är ett så kallat Hangman-spel. Det går ut på att användaren gissa
 Användaren har ett begränsat antal gisssningar på sig. Spelet är slut när användaren gissat alla ord rätt eller antal gissnar är slut.
 
 ## Installation
-Användaren måste vara uppkopplad mot internet
-
 Instruktioner för hur man installerar och kör projektet.
 
 ```bash
@@ -16,7 +14,7 @@ git clone https://github.com/MoaYve/Moas/ditt-projekt.git
 cd Moas
 
 # Installera beroenden
-pip install beautifulsoup4
+sudo python3 -m pip install bs4
 
 `import ditt_projekt
 
