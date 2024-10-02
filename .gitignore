@@ -1,0 +1,11 @@
+# Environments
+.env
+.venv
+env/
+venv/
+
+
+
+# Ignore temporary files
+*.tmp
+*.temp
