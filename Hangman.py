@@ -3,12 +3,13 @@
 import sys
 import requests
 import re
+import random
 try:
     from bs4 import BeautifulSoup4
 except:
-    
+    print('du måste installera Beautifulsoup4')
 
-import random
+
 
 def clean_string(input_string):
   
@@ -36,12 +37,12 @@ def GetWord():
     response = requests.get(url)
 
     # Parse the HTML content
-    soup = BeautifulSoup(response.content, 'html.parser')
+    soup = BeautifulSoup4(response.content, 'html.parser')
 
     # Extract text from the page
     text = soup.get_text()
     cleaned_string = clean_string(text)
-    len
+
     word_list = cleaned_string.split()
    
     pickedWord = (pickRandom(word_list))
