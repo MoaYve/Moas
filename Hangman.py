@@ -7,10 +7,97 @@ import random
 from bs4 import BeautifulSoup
 
 
+class Hangman():
+        
+        def __init__(self,pickedWord):
+            self.incorrect = 0
+            self.pickedWord = pickedWord
+            self.howManyGuesses = len(self.pickedWord)+10 #verkar rimligt
+            self.NrGuesses = 0
+            self.correct = 0
+            self.pickedWordCopy = pickedWord
+
+            self.game_progress = []
+            self.incorrectprogress = []
+            self.correctprogress = []
+
+        def GuessALetter(self):
+
+            user_input = input(f"Gissa på en bokstav, du har {self.howManyGuesses-self.NrGuesses} gissningar kvar: \n")
+            user_input = user_input.lower()
+            return user_input
+    
+        def CorrectFormat(self, input_):
+            
+            return input_.isdigit() or (input_.isalpha() and len(input_) > 1)
+
+        def spelaHangman(self):
+
+            print('Hej och välkommen till Hangman!\n')
+            lengthWord = (len(self.pickedWord))
+            print(f'Nu börjar spelet. Ordet har {lengthWord} antal bokstäver.\n')
+            print(f"Du har totalt {self.howManyGuesses} antal gissningar på dig.")
+
+        
+        
+            while self.NrGuesses<self.howManyGuesses:
+
+                user_input = self.GuessALetter() # be om gissning
+
+                self.NrGuesses = self.NrGuesses+1 # hur många gånger har jag gissat
+
+                if self.CorrectFormat(user_input):
+                    print('Du måste välja en bokstav.')
+                    continue
+
+                if user_input in self.incorrectprogress:
+                    print('Du har redan gissat på den här bokstaven.')
+                    continue
+
+                if self.NrGuesses>self.howManyGuesses:
+                    print('Du har tyvärr gissat för många gånger.')
+                    print('Det rätta order är {0}'.format(self.pickedWord))
+                    quit()
+
+
+                if user_input in self.pickedWordCopy:
+
+                    count = self.pickedWordCopy.count(user_input)
+
+                    print(f"Ja, {user_input}  finns i ordet {count} gånger.")
+
+                    if len(self.incorrectprogress)>0:
+                        print(f"Du har gissat på följande bokstäver: {self.incorrectprogress} som inte finns i ordet.\n")
+                   
+
+                    self.correctprogress.append(user_input * count)
+                    print(f"Du har gissat rätt på följande bokstäver: {self.correctprogress}\n")
+             
+
+                    self.pickedWordCopy = self.pickedWordCopy.replace(user_input,'')
+                   
+
+                    if len(self.pickedWordCopy)==0:
+                        print(f'Du har gissat alla bokstäver rätt, ordet är: {self.pickedWord}!')
+                        quit()
+
+
+            
+
+                else:
+                    self.incorrectprogress.append(user_input)
+                    print(f"Du har gissat på följande bokstäver: {self.incorrectprogress} som inte finns i ordet.\n")
+                    if len(self.correctprogress)>0:
+                        print(f"Du har gissat rätt på följande bokstäver: {self.correctprogress}\n")
+             
+            print('Tyvärr har du gissat för många gånger och spelet är slut.')
+            print(f"Det rätta ordet är: {self.pickedWord}")
+
+
 def clean_string(input_string):
   
     
-    pattern = r'[0-9(),.|%;-]'
+    pattern = r'[0-9(),.:|%;-]'
     
     cleaned_string = re.sub(pattern, '', input_string)
     cleaned_string = re.sub(r'\b\w{1,3}\b', '', cleaned_string)
@@ -46,108 +133,10 @@ def GetWord():
 
     return pickedWord
 
-def main():
-    
-    howManyGuessesdoIHave = 20
-    pickedWord = GetWord()
-
-    printWelcomeandNumber(pickedWord,howManyGuessesdoIHave)
-
-    pickedWordCopy = pickedWord
-
-    NrGuesses = 0
-    #bra veta vad man redan gissat på
-    storedRightGuessedLetters = ""
-    storedWrongGuessedLetters = ""
-   
-   
-
-    #fortsätt bara gissa tills du har rätt, och inte har gissat för många ggr
-    while len(pickedWordCopy)>0 and NrGuesses<howManyGuessesdoIHave:
-
-        #be om första gissningen
-        Letter, NrGuesses = GuessALetter(NrGuesses,howManyGuessesdoIHave)
-
-        if Letter in pickedWordCopy:
-
-            count = pickedWordCopy.count(Letter)
-
-            print(f"Ja, {Letter}  finns i ordet {count} gånger.")
-
-            storedRightGuessedLetters = storedRightGuessedLetters+(Letter * count)
-
-            pickedWordCopy = pickedWordCopy.replace(Letter,"")
-          
-
-        else:
-
-
-            if Letter in storedWrongGuessedLetters:
-                print(f"Du har redan gissat på {Letter}, och det finns inte i ordet")
-
-            elif Letter in storedRightGuessedLetters:
-                print(f"Du har redan gissat på {Letter} som finns i ordet.")
-
-            else:
-                storedWrongGuessedLetters = storedWrongGuessedLetters+Letter
-
-            
-        if len(storedWrongGuessedLetters)>0:
-            print(f"Du har gissat på följande bokstäver: {storedWrongGuessedLetters} som inte finns i ordet.\n")
-        
-        if len(storedRightGuessedLetters)>0:
-            print(f"Du har gissat rätt på följande bokstäver: {storedRightGuessedLetters}\n")
-
-
-    
-    
-    else:
-
-        if len(pickedWordCopy) == 0:
-            print(f'Du har gissat alla bokstäver rätt, ordet är: {pickedWord}!')
-        
-
-        elif NrGuesses==howManyGuessesdoIHave:
-             print(f'Du har gissat för många gånger tyvärr, spelet är slut. Det rätta order var: {pickedWord}.')
-
-
-
-
-
-def GuessALetter(NrGuesses,howManyGuessesdoIHave):
-
- 
-        if (howManyGuessesdoIHave-NrGuesses)>0:
-            user_input = input(f"Gissa på en bokstav, du har {howManyGuessesdoIHave-NrGuesses} gissningar kvar: \n")
-            user_input = user_input.lower()
-        
-
-            print(f"Du gissade på: {user_input}")
-            NrGuesses = NrGuesses+1
-            print(f"Du har gissat {NrGuesses} gånger")
-
-
-            if user_input.isalpha():
-            
-                return user_input, NrGuesses
-
-            else:
-                print('Du måste välja en bokstav.\n')
-
-                user_input, NrGuesses = GuessALetter(NrGuesses,howManyGuessesdoIHave)
-
-                return user_input, NrGuesses
-        else:
-            
-            user_input = " "
-            return user_input, NrGuesses
-
-        
-
-
 
 if __name__ == '__main__':
-    if len(sys.argv) > 0:
-        main()
-    else:
-        print("Too many arguments provided.")
+
+    ordet = GetWord()
+   
+    hangman = Hangman(ordet)
+    hangman.spelaHangman()
