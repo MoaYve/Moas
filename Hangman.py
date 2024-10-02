@@ -11,6 +11,7 @@ except:
 import random
 
 def clean_string(input_string):
+    print('moa')
     
     pattern = r'[0-9(),.|%;-]'
     
